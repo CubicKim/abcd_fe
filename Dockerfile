@@ -4,7 +4,7 @@ WORKDIR /app
 
 # 빌드에 필요한 그레이들 파일과 소스코드를 가상 공간으로 복사합니다.
 COPY gradlew .
-├── COPY gradle gradle
+COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src

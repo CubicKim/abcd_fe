@@ -62,7 +62,7 @@ jobs:
       # 8. 바뀐 배포 명세서를 push하여 ArgoCD가 배포하도록 트리거 발동
       - name: Commit and Push Manifest Changes
         run: |
-          cd manifest-repo
+          cd manifest-repo/abcd_fe
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add deployment.yaml

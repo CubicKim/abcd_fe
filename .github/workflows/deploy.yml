@@ -57,7 +57,7 @@ jobs:
       - name: Update Kubernetes Manifest
         run: |
           cd manifest-repo/abcd_fe  # <-- 요렇게 내 폴더 안으로 들어가서 치환!
-          sed -i 's|image: ghcr.io/.*|image: ghcr.io/cubickim/abcd_be:'${{ github.run_number }}'|g' deployment.yaml
+          sed -i 's|image: ghcr.io/.*|image: ghcr.io/cubickim/abcd_fe:'${{ github.run_number }}'|g' deployment.yaml
 
       # 8. 바뀐 배포 명세서를 push하여 ArgoCD가 배포하도록 트리거 발동
       - name: Commit and Push Manifest Changes

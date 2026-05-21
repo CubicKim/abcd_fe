@@ -1,0 +1,70 @@
+name: Java 17 App CI/CD with GHCR
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 깃허브 가상 컴퓨터로 내 자바 소스코드 가져오기
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      # 2. GitHub Container Registry(GHCR)에 안전하게 로그인
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3. 가상 리눅스에 JDK 17 주방 장비 설치
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      # 4. Gradle 명령어로 완제품 jar 파일 빌드
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
+
+      # 5. 도커 이미지 빌드 후 쉼표(,) 문법으로 안전하게 GHCR 보관함에 Push
+      - name: Build and Push Docker Image to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.actor }}/abcd_fe:latest,ghcr.io/${{ github.actor }}/abcd_fe:${{ github.run_number }}
+
+      # 6. 원격에 있는 내 배포 명세서(Manifest) 저장소 문 열고 들어가기
+      - name: Checkout Manifest Repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'CubicKim/abcd_ppp-manifest'
+          token: ${{ secrets.GH_TOKEN }}           # 저장소 Settings에 숨겨둔 마스터 키!
+          path: manifest-repo
+
+      # 7. deployment.yaml 내부의 image: 부분을 새로 구운 이미지 태그 번호로 가차없이 교체
+      - name: Update Kubernetes Manifest
+        run: |
+          cd manifest-repo
+          sed -i 's|image: ghcr.io/.*|image: ghcr.io/'${{ github.actor }}'/abcd_fe:'${{ github.run_number }}'|g' deployment.yaml
+
+      # 8. 바뀐 배포 명세서를 push하여 ArgoCD가 배포하도록 트리거 발동
+      - name: Commit and Push Manifest Changes
+        run: |
+          cd manifest-repo
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git add deployment.yaml
+          git commit -m "Auto-update abcd_fe image to version ${{ github.run_number }} [skip ci]"
+          git push origin main

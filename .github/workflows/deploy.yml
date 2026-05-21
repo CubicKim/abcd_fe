@@ -6,6 +6,7 @@ on:
       - dev
 
 jobs:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -55,7 +56,7 @@ jobs:
       # 7. deployment.yaml 내부의 image: 부분을 새로 구운 이미지 태그 번호로 가차없이 교체
       - name: Update Kubernetes Manifest
         run: |
-          cd manifest-repo/abcd_be
+          cd manifest-repo/abcd_fe  # <-- 요렇게 내 폴더 안으로 들어가서 치환!
           sed -i 's|image: ghcr.io/.*|image: ghcr.io/cubickim/abcd_be:'${{ github.run_number }}'|g' deployment.yaml
 
       # 8. 바뀐 배포 명세서를 push하여 ArgoCD가 배포하도록 트리거 발동

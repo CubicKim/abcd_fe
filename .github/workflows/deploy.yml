@@ -43,7 +43,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/${{ github.actor }}/abcd_fe:latest,ghcr.io/${{ github.actor }}/abcd_fe:${{ github.run_number }}
+          tags: ghcr.io/cubickim/abcd_fe:latest,ghcr.io/cubickim/abcd_fe:${{ github.run_number }}
 
       # 6. 원격에 있는 내 배포 명세서(Manifest) 저장소 문 열고 들어가기
       - name: Checkout Manifest Repository
@@ -57,7 +57,7 @@ jobs:
       - name: Update Kubernetes Manifest
         run: |
           cd manifest-repo
-          sed -i 's|image: ghcr.io/.*|image: ghcr.io/'${{ github.actor }}'/abcd_fe:'${{ github.run_number }}'|g' deployment.yaml
+          sed -i 's|image: ghcr.io/.*|image: ghcr.io/cubickim/abcd_fe:'${{ github.run_number }}'|g' deployment.yaml
 
       # 8. 바뀐 배포 명세서를 push하여 ArgoCD가 배포하도록 트리거 발동
       - name: Commit and Push Manifest Changes

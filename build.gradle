@@ -16,8 +16,14 @@ repositories {
 }
 
 dependencies {
-    // 웹 서버 구동을 위한 필수 스타터
+    // 🎯 1. 웹 서버 구동을 위한 필수 스타터
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // 🎯 2. Thymeleaf 템플릿 엔진 라이브러리 (HTML 화면 렌더링용)
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // (선택) 개발 시 파일 변경 후 새로고침을 편하게 해주는 툴
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // 테스트용 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

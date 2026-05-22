@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ABCD GitOps FullStack Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; text-align: center; background-color: #f4f6f9; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
+        h1 { color: #333; }
+        .box { padding: 15px; margin-top: 20px; border-radius: 5px; font-weight: bold; }
+        .fe { background-color: #e3f2fd; color: #0d47a1; }
+        .be { background-color: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ABCD FE Server is Running (JDK 17 + GitOps)!</h1>
+    <div class="box fe">🌐 Front-End (Port 8080) Status: OK</div>
+
+    <!-- 🎯 백엔드에서 받아온 메시지가 여기에 출력됩니다 -->
+    <div class="box be">
+        🚀 Backend Response: <span th:text="${backendMessage}">로딩 중...</span>
+    </div>
+</div>
+
+</body>
+</html>

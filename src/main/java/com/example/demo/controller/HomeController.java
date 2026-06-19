@@ -12,7 +12,8 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         // 🎯 [핵심 주소] 쿠버네티스 내부 DNS 서비스 이름을 주소로 사용합니다!
-        String backendUrl = "http://abcd-be-service:8081/api/data";
+        //String backendUrl = "http://abcd-be-service:8081/api/data";
+        String backendUrl = "http://localhost:20021/api/data";
 
         String backendMessage = "";
         try {

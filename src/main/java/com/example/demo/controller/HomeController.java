@@ -20,7 +20,11 @@ public class HomeController {
             // 백엔드 API 호출하여 결과 Map으로 받기
             Map<String, Object> response = restTemplate.getForObject(backendUrl, Map.class);
             if (response != null) {
-                backendMessage = (String) response.get("message");
+//                backendMessage = (String) response.get("message");
+                backendMessage = "백엔드 연결 성공";
+                model.addAttribute("id", response.get("id"));
+                model.addAttribute("title", response.get("title"));
+                model.addAttribute("content", response.get("content"));
             }
         } catch (Exception e) {
             backendMessage = "백엔드 연결 실패: " + e.getMessage();
